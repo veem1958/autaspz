@@ -62,7 +62,7 @@ int main()
 
 do {
 
-    navrat = scanf("%c", &c);         // nacitaj znak
+    navrat = scanf("%c", &c);         // nacitaj znak volby
     
     if(c=='s') 
     {	
