@@ -17,80 +17,69 @@ FILE * vypis()
   char datum[8];
   char text[50];
 
+    
   if ((fr = fopen("ppredaj.txt","rt")) != NULL)
   {
 
+	do
+	{
 	
-    printf(popis1);
-    do    
-    {
-      z = fgetc(fr);
-      printf("%c",z);
-    } while ( z != '\n');
-    //printf("%c",z);
-    
-    printf(popis2);
-    do
-    {
-      z = fgetc(fr);
-      printf("%c",z);
-    } while ( z != '\n');
-    //printf("%c",z);
-    
-
-    printf(popis3);
-    do
-    {
-      z = fgetc(fr);
-      printf("%c",z);
-    } while ( z != '\n');
-    //printf("%c",z);
-
-    printf(popis4);
-    do
-    {
-      z = fgetc(fr);
-      printf("%c",z);
-    } while ( z != '\n');
-    //printf("%c",z);
-
-    printf(popis5);
-    do
-    {
-      z = fgetc(fr);
-      printf("%c",z);
-    } while ( z != '\n');
-    //printf("%c",z);
-
-    
-    /*
-	fgets(text, sizeof(text), fr);
-    printf(popis1);
-    fputs(text,stdout);
-
-	fgets(text, sizeof(text), fr);
-    printf(popis2);
-    fputs(text,stdout);
-
-	fgets(text, sizeof(text), fr);
-    printf(popis3);
-    fputs(text,stdout);
-
-	fgets(text, sizeof(text), fr);
-    printf(popis4);
-    fputs(text,stdout);
-
-	fgets(text, sizeof(text), fr);
-    printf(popis5);
-    fputs(text,stdout);
-
-	fgets(text, sizeof(text), fr);
-    fputs(text,stdout);
-    */   
+	    printf(popis1);
+	    do    
+	    {
+	      z = fgetc(fr);
+	      printf("%c",z);
+		  if (z == EOF) break; 
+	    } while ( z != '\n');
+	    
+	    printf(popis2);
+	    do
+	    {
+	      z = fgetc(fr);
+	      printf("%c",z);
+		  if (z == EOF) break; 
+	    } while ( z != '\n');    
+	
+	    printf(popis3);
+	    do
+	    {
+	      z = fgetc(fr);
+	      printf("%c",z);
+		  if (z == EOF) break; 
+	    } while ( z != '\n');
+	
+	    printf(popis4);
+	    do
+	    {
+	      z = fgetc(fr);
+	      printf("%c",z);
+		  if (z == EOF) break; 
+	    } while ( z != '\n');
+	
+	    printf(popis5);
+	    do
+	    {
+	      z = fgetc(fr);
+	      printf("%c",z);
+		  if (z == EOF) break; 
+	    } while ( z != '\n');
+	
+	    printf("..");
+	    do
+	    {
+	      z = fgetc(fr);
+	      printf("%c",z);
+		  if (z == EOF) break; 
+	    } while ( z != '\n');
+         
+	
+	} while (z != EOF);
+	
   }
 
   return fr;
 }
+
 
 int main()
 {
