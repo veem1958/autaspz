@@ -5,15 +5,40 @@ FILE * vypis()
 {
   FILE *fr;
   char z;
+  char popis1[18] = "meno priezvisko: ";
+  char popis2[6] = "SPZ: ";
+  char popis3[6] = "typ: ";
+  char popis4[7] = "cena: ";
+  char popis5[8] = "datum: ";
   char meno[50];
   char spz[7];
   char typ;
   char cena[8];
   char datum[8];
+  char text[50];
 
   if ((fr = fopen("ppredaj.txt","rt")) != NULL)
   {
-    printf("meno priezvisko: ");
+
+	
+    printf(popis1);
+    do    
+    {
+      z = fgetc(fr);
+      printf("%c",z);
+    } while ( z != '\n');
+    //printf("%c",z);
+    
+    printf(popis2);
+    do
+    {
+      z = fgetc(fr);
+      printf("%c",z);
+    } while ( z != '\n');
+    //printf("%c",z);
+    
+
+    printf(popis3);
     do
     {
       z = fgetc(fr);
@@ -21,18 +46,47 @@ FILE * vypis()
     } while ( z != '\n');
     //printf("%c",z);
 
-	fgets(text, sizeof(text), fr);
-    printf("SPZ: ");
-    fputs(text,stdout);
-    
-    /*
+    printf(popis4);
     do
     {
       z = fgetc(fr);
       printf("%c",z);
     } while ( z != '\n');
-    printf("%c",z);
-    */
+    //printf("%c",z);
+
+    printf(popis5);
+    do
+    {
+      z = fgetc(fr);
+      printf("%c",z);
+    } while ( z != '\n');
+    //printf("%c",z);
+
+    
+    /*
+	fgets(text, sizeof(text), fr);
+    printf(popis1);
+    fputs(text,stdout);
+
+	fgets(text, sizeof(text), fr);
+    printf(popis2);
+    fputs(text,stdout);
+
+	fgets(text, sizeof(text), fr);
+    printf(popis3);
+    fputs(text,stdout);
+
+	fgets(text, sizeof(text), fr);
+    printf(popis4);
+    fputs(text,stdout);
+
+	fgets(text, sizeof(text), fr);
+    printf(popis5);
+    fputs(text,stdout);
+
+	fgets(text, sizeof(text), fr);
+    fputs(text,stdout);
+    */   
   }
 
   return fr;
