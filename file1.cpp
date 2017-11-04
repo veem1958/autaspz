@@ -35,7 +35,7 @@ int main()
 		{
 			riadok++;
 			pozicia = 1;
-			//fr++;         // netreba fr++ lebo fgetc automaticky posúva smernik
+			//fr++;         // netreba fr++ lebo fgetc automaticky posúva smernik ---- test
 		}
 
 		if ((z != znak) && (z != '\n')) 
