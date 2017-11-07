@@ -94,7 +94,6 @@ void odmena(FILE *sub, char *sdat)
 	float perc0 = 0.022, perc1 = 0.015;
 	char meno[10]; char priez[16]; char spz[7]; char typ[2]; char cena[9]; char datum[8]; char pom[2];
 
-	//if ((sub = fopen("ppredaj.txt","rt")) != NULL)
 	if (sub != NULL)
   	{	
 	    do
@@ -140,24 +139,21 @@ void odmena(FILE *sub, char *sdat)
 			    
 		} while (true);
 		
-		rewind(sub);
-		
-  	}
-  
+		rewind(sub);		
+  	}  
 }
 
 
 char *vytvorpole(FILE *sub, char *pole)
 {
-	//char *pole;
-	int x ;   
-	int n = 0;        // pocet zaznamov
-	int velkost = 0;  // velkost pola SPZ
+	int x, i ;   
+	int n = 0;           /* pocet zaznamov */
+	int velkost = 0;     /* velkost pola SPZ */
 	char meno[10]; char priez[16]; 
 	char spz[7]; char typ[2]; char cena[9]; char datum[8]; 
-	char pspz[1][7]; 
+	char *pom;	   /* pre ulozenie zaciatok pola */
 
-	//if ((sub = fopen("ppredaj.txt","rt")) != NULL)
+	pom = NULL;
 	if (sub != NULL)
 	{
 	    do
@@ -181,33 +177,139 @@ char *vytvorpole(FILE *sub, char *pole)
 			 
 		} while (true);
 		
+		
 		printf("pocet zaznamov: %d\n", n);
-		printf("velkost pola SPZ: %d\n", velkost);
+		printf("velkost pola SPZ: %d\n", velkost);	/* len na test vypisy */
 			
 		rewind(sub);
 	
-		printf("pole pred: %p\n", pole);
+		printf("adresa pole pred: %p\n", pole);		/* len na test */
 		
 		if (pole == NULL)
 		{
 			pole = (char *)malloc(n*velkost);
-			if (pole == NULL) return pole;
+			if (pole == NULL) 
+			{
+				printf("chyba alokacia pamat pola\n");
+				return pole;
+			}
+			pom = pole;			/* odpamataj si zaciatocnu adresu */
 		}
 		else
 		{
 			free(pole);
 			pole = NULL;
-			pole = (char *)malloc(n*velkost);			
-			if (pole == NULL) return pole;
+			pole = (char *)malloc(n*velkost);		/* smernik ide len po 1 byte a nie po 7 */			
+			if (pole == NULL) 
+			{
+				printf("chyba alokacia pamat pola\n");
+				return pole;
+			}
+			pom = pole;
 		}
-		printf("pole po: %p\n", pole);
-
 		
+		printf("adresa pole po alokacii: %p\n", pole); 		/* len na test */
+
+		/* teraz naplnim pole SPZ */
+		n = 0;
+	    do
+		{	
+			if (fscanf(sub,"%s", meno) != EOF) x=1;
+			else break;	    	
+			if (fscanf(sub,"%s", priez) != EOF) x=1;     
+			else break;
+	
+			fscanf(sub,"%s", pole);
+			//printf("adresa pole pri %d plneni: %p\n", n, pole); 		/* len na test */
+			pole = pole+7;							// smernik pole je typu char ide len po 1 byte takze ho musim zvysit o 7 = dlzku SPZ
+			n++;
+	    	
+			fscanf(sub,"%s", typ);
+			fscanf(sub,"%s", cena);			
+			if (fscanf(sub,"%s", datum) != EOF) x=1;
+			else break;
+			 
+		} while (true);
+		
+		pole = pom;			/* nastav adresu smernika pole na zaciatok */
 		rewind(sub);
-			
+		
+		/*
+		//printf("adresa pole po naplneni a nastaveni na zaciatok: %p\n", pole); 		// len na test 
+		
+		printf("obsah pola :\n");
+		for (i = 0; i<n*velkost;i++)
+		{ 
+			printf("%c", *pole);		// OK - na test 
+			pole++;
+		}
+		printf("\n");
+		pole = pom;		// nastav adresu smernika pole na zaciatok
+		*/ 
 	}
 		
 	return pole;
+}
+
+
+void vypisSPZ(char *pole)
+{
+	char *pom;	   /* pre ulozenie zaciatok pola */
+	int i = 0; int j;
+	
+	pom = NULL;
+	
+	if (pole == NULL)
+	{
+		printf("Pole nie je vytvorene\n");
+	}
+	else
+	{
+		pom = pole;
+		for (i=0; i< 10 ; i++)
+		{
+			for (j=0;j<7;j++)
+			{
+				printf("%c", *pole);
+				if((j==1) || (j == 4)) printf(" ");		/* vloz medzeru */
+				pole++;	
+			}
+			printf("\n");
+		}
+		pole = pom;
+	}	
+}
+
+
+void vypisPalindrom(char *pole)
+{
+	char *pom;	   /* pre ulozenie zaciatok pola */
+	int i = 0; int j;
+	
+	pom = NULL;
+	
+	if (pole == NULL)
+	{
+		printf("Pole nie je vytvorene\n");
+	}
+	else
+	{
+		pom = pole;
+		for (i=0; i< 10 ; i++)
+		{
+			if( (*pole == *(pole+6)) && (*(pole+1) == *(pole+5)) )
+			{
+				printf("%c%c\n", *pole, *(pole+1));   // OK
+				//printf("%c%c%c%c\n", *pole, *(pole+1), *(pole+2), *(pole+3));   // test
+				pole = pole + 7;
+			}
+			else
+			{
+				pole = pole+7;
+			}
+		}
+		pole = pom;
+	}	
 }
 
 
@@ -219,7 +321,6 @@ int rok, mesiac, den;
 char srok[5] ; char smes[3]; char sden[3]; char sdatum[9] = "";
 time_t datum;
 tm *str;
-
 FILE *ff; char *p_pole;
 
 ff = NULL; p_pole = NULL;
@@ -258,7 +359,7 @@ do
     case 'o': 
 	{
 		printf(" %d%02d%02d\n", rok,mesiac,den); 
-		sdatum[0] = '\0';      // vynuluje retazec
+		sdatum[0] = '\0';      // vynuluje retazec a poskladaj ho z rok, mesiac, den
 		strcat(sdatum,srok);
 		if (mesiac < 10) 
 		{
@@ -274,7 +375,7 @@ do
 		}
 		else {strcat(sdatum,sden);}
 
-		printf("%s\n", sdatum);      // len test ci to robi dobre
+		//printf("%s\n", sdatum);      // len test ci to robi dobre
 				
 		if (c == 'v')    // iba ak bola volba "v"
 		{
@@ -287,16 +388,19 @@ do
 		if (c == 'v')    // iba ak bola volba "v"
 		{
 			p_pole = vytvorpole(ff, p_pole);
-			printf("pole vrat: %p\n", p_pole);			
+			//printf("adresa pole po navrate z funkcie n: %p\n", p_pole);		// OK - len na test 		
 		}
 		break;
 	}
 	case 's' :
 		{
+			vypisSPZ(p_pole);
+			//printf("adresa pole po navrate z funkcie s: %p\n", p_pole);		// OK - len na test 		
 			break;
 		}
 	case 'p' :
 		{
+			vypisPalindrom(p_pole);
 			break;
 		}
 	case 'z' :
@@ -313,9 +417,9 @@ if (c == 'v')
 	if (ff != NULL) fclose(ff);
 }
 
-//if (ff != NULL) free(ff);
+//if (ff != NULL) free(ff);              // toto vykazuje nejaku chybu ??!!!
 ff = NULL;
-//if (p_pole != NULL) free(p_pole);
+//if (p_pole != NULL) free(p_pole);      // aj toto vykazuje nejaku chybu !??!!
 p_pole = NULL;
 
 return 0;
