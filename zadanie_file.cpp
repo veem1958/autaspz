@@ -480,6 +480,7 @@ itoa((rok-1),srok,10);      // konverzia rok ako cislo na retazec ale o 1 rok me
 itoa(mesiac,smes,10);   
 itoa(den,sden,10);		 
 
+
 do
 {
   znak = getchar();
@@ -493,6 +494,7 @@ do
 	}
     case 'o': 
 	{
+		/*
 		printf(" %d%02d%02d\n", rok,mesiac,den); 
 		sdatum[0] = '\0';      // vynuluje retazec a poskladaj ho z rok, mesiac, den
 		strcat(sdatum,srok);
@@ -509,8 +511,11 @@ do
 			strcat(sdatum,sden);
 		}
 		else {strcat(sdatum,sden);}
-
-		//printf("%s\n", sdatum);        // len test ci to robi dobre
+		*/
+		
+		printf("zadaj aktualny datum v tvare \"RRRRMMDD\" : ");
+		scanf("%s",&sdatum);
+		printf("zadal si %s\n", sdatum);        // len test ci to robi dobre
 				
 		if (c == 'v')     // iba ak bola volba "v"
 		{
@@ -553,9 +558,12 @@ if (c == 'v')
 	if (ff != NULL) fclose(ff);
 }
 
-//if (ff != NULL) free(ff);              // pri tomto vykazuje chybu ??!!! - neviem preËo nechce uvoæniù pam‰ù
+fclose(ff);
+
+//if (ff != NULL) free((void *)ff);              // pri tomto vykazuje chybu ??!!! - neviem preËo nechce uvoæniù pam‰ù
 ff = NULL;
-//if (p_pole != NULL) free(p_pole);      // aj pri tomto vykazuje chybu !??!!
+
+if (p_pole != NULL) free((void *)p_pole);      // toto urobi OK !
 p_pole = NULL;
 
 return 0;
